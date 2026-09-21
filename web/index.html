@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1a14">
+<title>pitboss</title>
+<link rel="stylesheet" href="/css/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand">pitboss</span>
+  <nav>
+    <button class="nav-btn on" data-screen="setup">Setup</button>
+    <button class="nav-btn" data-screen="table">Table</button>
+    <button class="nav-btn" data-screen="stats">Stats</button>
+    <button class="nav-btn" data-screen="chart">Chart</button>
+  </nav>
+  <span id="sync" class="sync ok">synced</span>
+</header>
+
+<!-- Setup ---------------------------------------------------------------->
+<section id="screen-setup" class="screen active">
+  <div id="resume" class="resume" hidden>
+    <p class="resume-text"></p>
+    <div class="row">
+      <button class="primary" data-act="resume">Resume</button>
+      <button data-act="discard">Start fresh</button>
+    </div>
+  </div>
+
+  <h1>New session</h1>
+
+  <label for="rule-set">Rules</label>
+  <select id="rule-set"></select>
+  <p id="rule-summary" class="muted small"></p>
+
+  <label for="mode">Mode</label>
+  <select id="mode">
+    <option value="tutor">Tutor — correct me on every hand</option>
+    <option value="simulation">Simulation — hold feedback to end of shoe</option>
+  </select>
+
+  <label for="sys">Counting system</label>
+  <select id="sys"></select>
+
+  <label class="check"><input type="checkbox" id="show-count"> Show the running count while I play</label>
+  <label class="check"><input type="checkbox" id="count-checks"> Ask me for the count at random intervals</label>
+
+  <button id="start" class="primary big">Deal me in</button>
+
+  <p class="muted small">
+    H hit · S stand · D double · P split · R surrender. Keyboard works too.
+  </p>
+</section>
+
+<!-- Table ---------------------------------------------------------------->
+<section id="screen-table" class="screen">
+  <div class="hud">
+    <div class="hud-item"><span class="k">hands</span><span id="hud-hands" class="v">0</span></div>
+    <div class="hud-item"><span class="k">accuracy</span><span id="hud-acc" class="v">—</span></div>
+    <div class="hud-item"><span class="k">units</span><span id="hud-bank" class="v">0</span></div>
+    <div class="hud-item" id="hud-count" hidden>
+      <span class="k">rc / tc</span><span class="v"><span id="hud-rc">0</span> / <span id="hud-tc">0.0</span></span>
+    </div>
+  </div>
+  <div class="pen"><div id="pen-bar" class="pen-bar"></div></div>
+
+  <div class="felt">
+    <div id="dealer" class="dealer"></div>
+    <div id="others" class="others"></div>
+    <div id="result" class="result"></div>
+    <div id="hero" class="hero"></div>
+  </div>
+
+  <div id="flash" class="flash"></div>
+
+  <div id="actions" class="actions">
+    <button data-action="hit" disabled>Hit<small>H</small></button>
+    <button data-action="stand" disabled>Stand<small>S</small></button>
+    <button data-action="double" disabled>Double<small>D</small></button>
+    <button data-action="split" disabled>Split<small>P</small></button>
+    <button data-action="surrender" disabled>Surr<small>R</small></button>
+  </div>
+</section>
+
+<!-- Stats ---------------------------------------------------------------->
+<section id="screen-stats" class="screen">
+  <h1>Performance</h1>
+  <div id="stat-tiles" class="tiles"></div>
+
+  <h2>Trend</h2>
+  <div id="trend" class="trend"></div>
+  <p id="trend-caption" class="muted small"></p>
+
+  <h2>Most-missed cells</h2>
+  <div id="worst"></div>
+
+  <h2>By input</h2>
+  <ul id="by-input" class="plain"></ul>
+  <p class="muted small">Touch decisions run slower than mouse; compare within a row, not across.</p>
+
+  <h2>Sessions</h2>
+  <ul id="sessions" class="plain"></ul>
+</section>
+
+<!-- Chart ---------------------------------------------------------------->
+<section id="screen-chart" class="screen">
+  <h1>Strategy reference</h1>
+  <div id="chart-body"></div>
+  <button id="end-session" class="danger">End session</button>
+</section>
+
+<div id="overlay" class="overlay" hidden></div>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>

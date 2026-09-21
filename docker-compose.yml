@@ -1,0 +1,18 @@
+services:
+  pitboss:
+    build: .
+    image: pitboss:latest
+    container_name: pitboss
+    restart: unless-stopped
+    ports:
+      # Change the host port if 8420 is taken, or drop the mapping entirely
+      # and attach this to your reverse proxy's network instead.
+      - "8420:8000"
+    volumes:
+      - pitboss-data:/data
+    environment:
+      - PITBOSS_DB=/data/pitboss.db
+      - TZ=America/Los_Angeles
+
+volumes:
+  pitboss-data:

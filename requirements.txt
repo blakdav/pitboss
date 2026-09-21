@@ -1,0 +1,7 @@
+# Pinned to the versions this was actually tested against.
+fastapi==0.141.1
+uvicorn[standard]==0.46.0
+pydantic==2.13.3
+
+# Test-only
+# pytest==8.3.4
