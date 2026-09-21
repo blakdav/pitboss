@@ -148,9 +148,11 @@ button.danger { color: var(--bad); border-color: var(--bad); margin-top: 24px; }
   justify-content: center; width: 100%;
   padding: 6px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
 }
-.other-seat { text-align: center; opacity: .78; }
-.other-seat.empty { color: var(--muted); font-size: .8rem; padding: 8px; }
-.cards.small { align-items: center; gap: 4px; font-size: .8rem; }
+/* Other seats were dimmed as decoration. Their cards have to be counted, so
+   they are held at near-full contrast. */
+.other-seat { text-align: center; opacity: .96; }
+.other-seat.empty { color: var(--muted); font-size: .8rem; padding: 8px; opacity: .7; }
+.cards.small { align-items: center; gap: 6px; font-size: .9rem; margin-bottom: 4px; }
 
 .hero { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; }
 .hero-hand {

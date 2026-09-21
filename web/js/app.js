@@ -19,6 +19,7 @@ const S = {
   system: null,
   mode: 'tutor',
   showCount: false,
+  showTotals: false,
   countChecks: false,
   shoe: null,
   counter: null,
@@ -143,6 +144,15 @@ async function startSession({ resume = null } = {}) {
   S.bankroll = st ? st.bankroll : 0;
   S.tally = st ? st.tally : { total: 0, correct: 0 };
 
+  // Display choices ride along in the session state so a resume comes back
+  // the way you left it rather than reverting to the setup defaults.
+  if (st && st.display) {
+    S.showCount = st.display.showCount;
+    S.showTotals = st.display.showTotals;
+  } else {
+    S.showTotals = $('#show-totals').checked;
+  }
+
   newShoe({ advanceTo: st ? st.cardsDealt : 0 });
   $('#resume').hidden = true;
   show('table');
@@ -171,6 +181,7 @@ async function saveState() {
           handIndex: S.handIndex,
           bankroll: S.bankroll,
           tally: S.tally,
+          display: { showCount: S.showCount, showTotals: S.showTotals },
         },
       },
     });
@@ -585,14 +596,18 @@ function render(net = null) {
   const dealerTotal = t.dealer.revealed
     ? handValue(dealerCards(t)).total
     : handValue(t.dealer.cards).total;
+  const dealerLabel = S.showTotals
+    ? ` <span class="total">${t.dealer.revealed ? dealerTotal : `${dealerTotal}+`}</span>`
+    : '';
   $('#dealer').innerHTML = `
-    <div class="seat-label">Dealer <span class="total">${t.dealer.revealed ? dealerTotal : `${dealerTotal}+`}</span></div>
+    <div class="seat-label">Dealer${dealerLabel}</div>
     <div class="cards">${handSVG(
       t.dealer.revealed ? [...t.dealer.cards, t.dealer.hole] : [...t.dealer.cards, null],
       { width: cardWidth(), hideFirst: false }
     )}</div>`;
 
   const others = [...t.before, ...t.after];
+  const seatW = seatCardWidth(others.length);
   $('#others').innerHTML = others.length
     ? others
         .map(
@@ -602,8 +617,11 @@ function render(net = null) {
         ${seat
           .map(
             (h) =>
-              `<div class="cards small">${handSVG(h.cards, { width: 34 })}
-               <span class="total ${h.busted ? 'bust' : ''}">${h.total}</span></div>`
+              `<div class="cards small">${handSVG(h.cards, { width: seatW })}${
+                S.showTotals
+                  ? `<span class="total ${h.busted ? 'bust' : ''}">${h.total}</span>`
+                  : ''
+              }</div>`
           )
           .join('')}
       </div>`
@@ -623,12 +641,15 @@ function render(net = null) {
             : h.doubled
               ? 'doubled'
               : '';
+      const total = S.showTotals
+        ? `<span class="total big ${h.busted ? 'bust' : ''}">${h.soft && h.total <= 21 ? 'soft ' : ''}${h.total}</span>`
+        : '';
+      const meta = total || tag
+        ? `<div class="hero-meta">${total}${tag ? `<span class="tag ${tag}">${tag}</span>` : ''}</div>`
+        : '';
       return `<div class="hero-hand ${active ? 'active' : ''}">
         <div class="cards">${handSVG(h.cards, { width: cardWidth() })}</div>
-        <div class="hero-meta">
-          <span class="total big ${h.busted ? 'bust' : ''}">${h.soft && h.total <= 21 ? 'soft ' : ''}${h.total}</span>
-          ${tag ? `<span class="tag ${tag}">${tag}</span>` : ''}
-        </div>
+        ${meta}
       </div>`;
     })
     .join('');
@@ -642,6 +663,15 @@ function cardWidth() {
   const w = Math.min(window.innerWidth, 620);
   const hands = S.table ? S.table.hero.length : 1;
   return Math.max(40, Math.min(76, Math.floor((w - 48) / (hands * 3.2))));
+}
+
+/** Other seats have to be readable — you are counting their cards too — so
+ *  they scale with how many seats are in play rather than sitting at a fixed
+ *  decorative size. */
+function seatCardWidth(seats) {
+  if (!seats) return 48;
+  const w = Math.min(window.innerWidth, 620) - 40;
+  return Math.max(38, Math.min(64, Math.floor(w / (seats * 1.75))));
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
